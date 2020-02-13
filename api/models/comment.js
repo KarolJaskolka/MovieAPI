@@ -1,3 +1,5 @@
+const Movie = require('../models/movie');
+const User = require('../models/user');
 const Sequelize = require('sequelize');
 const Model = Sequelize.Model;
 
@@ -16,18 +18,34 @@ Comment.init({
     },
     userid: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'users',
+            key: 'userid'
+        }
     },
     movieid: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'movies',
+            key: 'movieid'
+        }
     },
     threadid: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+            model: 'comments',
+            key: 'commentid'
+        }
     },
     description: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    title: {
+        type: Sequelize.STRING,
         allowNull: false
     },
     date: Sequelize.DATE
@@ -36,5 +54,9 @@ Comment.init({
     timestamps: false,
     modelName: 'comment'
 });
+
+Comment.belongsTo(Movie, { foreignKey: 'movieid'});
+Comment.belongsTo(User, { foreignKey: 'userid'});
+Comment.hasOne(Comment, { foreignKey: 'threadid' });
 
 module.exports = Comment;

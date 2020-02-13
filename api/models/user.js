@@ -15,9 +15,9 @@ User.init({
         allowNull: false
     },
     login: {
-        // unique
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     password: {
         type: Sequelize.STRING,
@@ -33,7 +33,8 @@ User.init({
     },
     email: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     phone: Sequelize.STRING,
     birth: Sequelize.DATEONLY

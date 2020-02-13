@@ -17,10 +17,12 @@ Movie.init({
         type: Sequelize.STRING,
         allowNull: false
     },
-    // unique name for prettier GET request
+    // unique name for prettier GET request, 
+    // because movies' titles are not unique in real world
     name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     },
     director: Sequelize.STRING,
     genre: Sequelize.STRING,
