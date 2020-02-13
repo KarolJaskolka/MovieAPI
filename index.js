@@ -12,7 +12,6 @@ app.listen(port, host, ()=>{
 });
 
 const Sequelize = require('sequelize');
-// Option 1: Passing parameters separately
 const sequelize = new Sequelize(process.env.DATABASE, process.env.LOGIN, process.env.PASS, {
   host: process.env.HOST,
   dialect: 'postgres'
@@ -53,9 +52,13 @@ app.use((req, res, next)=>{
 // Routes
 const movieRoutes = require('./api/routes/movie');
 const userRoutes = require('./api/routes/user');
+const commentRoutes = require('./api/routes/comment');
+const ratingRoutes = require('./api/routes/rating');
 
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/ratings', ratingRoutes);
 
 // Serve static files 
 app.use('/api/images', express.static('./api/images'));
