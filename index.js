@@ -26,6 +26,11 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
+// Cross-origin resource sharing (Allow different ports)
+const cors = require('cors');
+const corsOptions = { origin: 'http://localhost' }
+app.use(cors(corsOptions));
+
 // Prevent multiple requests
 const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({

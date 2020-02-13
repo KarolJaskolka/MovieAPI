@@ -34,7 +34,6 @@ Comment.init({
     },
     threadid: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
             model: 'comments',
             key: 'commentid'
