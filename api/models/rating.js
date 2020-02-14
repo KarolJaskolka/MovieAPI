@@ -44,6 +44,8 @@ Rating.init({
 });
 
 Rating.belongsTo(Movie, { foreignKey: 'movieid' });
+Movie.hasMany(Rating, { foreignKey: 'movieid' });
 Rating.belongsTo(User, { foreignKey: 'userid' });
+User.hasMany(Rating, { foreignKey: 'userid' });
 
 module.exports = Rating;

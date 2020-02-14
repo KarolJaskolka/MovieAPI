@@ -29,8 +29,7 @@ Movie.init({
     releasedate: Sequelize.DATEONLY,
     duration: Sequelize.INTEGER, // minutes
     description: Sequelize.STRING,
-    rating: Sequelize.NUMBER
-
+    rating: Sequelize.NUMBER // derived data, I think thats how sites like imdb works
 },  {
     sequelize,
     timestamps: false,

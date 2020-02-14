@@ -1,10 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const Rating = require('../models/rating');
+const User = require('../models/user');
+const Movie = require('../models/movie');
 
 // GET api/ratings?limit=100&offset=0
 router.get('/', (req, res) => {
     Rating.findAll({
+        attributes:['ratingid','stars','date'],
+        include: [{
+            model: User,
+            attributes: ['login'],
+            required: true,
+        },{
+            model: Movie,
+            attributes: ['title', 'name'],
+            required: true,
+        }],
         limit: req.query.limit || 100,
         offset: req.query.offset || 0
     })
