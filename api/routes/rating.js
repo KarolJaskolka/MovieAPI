@@ -27,6 +27,28 @@ router.get('/', (req, res) => {
     })
 })
 
+// GET api/ratings/:id
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    Rating.findByPk(id, {
+        attributes:['ratingid','stars','date'],
+        include: [{
+            model: User,
+            attributes: ['login'],
+            required: true,
+        },{
+            model: Movie,
+            attributes: ['title', 'name'],
+            required: true,
+        }]
+    })
+    .then((data) => {
+        res.status(200).json({
+            rating: data
+        })
+    });
+})
+
 // POST api/ratings
 router.post('/', (req, res) => {
     Rating.create({

@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 // GET api/users/:login
 router.get('/:login', (req, res) => {
     const login = req.params.login;
-    User.findAll({
+    User.findOne({
         // do not return password
         attributes: ['login', 'firstname', 'lastname', 'email', 'phone', 'birth'],
         where: {

@@ -27,6 +27,28 @@ router.get('/', (req, res) => {
     })
 })
 
+// GET api/comments/:id
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    Comment.findByPk(id, {
+        attributes: ['commentid', 'title', 'description', 'date', 'threadid'],
+        include: [{
+            model: User,
+            attributes: ['login'],
+            required: true,
+        },{
+            model: Movie,
+            attributes: ['title', 'name'],
+            required: true,
+        }]
+    })
+    .then((data) => {
+        res.status(200).json({
+            comment: data
+        })
+    });
+})
+
 // POST api/comments
 router.post('/', (req, res) => {
     Comment.create({

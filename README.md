@@ -9,7 +9,7 @@
 
 ### Requests:
 
-##### Movie:
+#### Movie:
 
 - GET api/movies
 - GET api/movies/:name
@@ -19,7 +19,7 @@
 - PUT api/movies/:id
 - DELETE api/movies/:id
 
-##### User:
+#### User:
 
 - GET api/users
 - GET api/users/:login
@@ -29,16 +29,18 @@
 - PUT api/users/:id
 - DELETE api/users/:id
 
-##### Comment: 
+#### Comment: 
 
 - GET api/comments
+- GET api/comments/:id
 - POST api/comments
 - PATCH api/comments/:id
 - DELETE api/comments/:id
 
-##### Rating:
+#### Rating:
 
 - GET api/ratings
+- GET api/ratings/:id
 - POST api/ratings
 - PATCH api/ratings/:id
 - DELETE api/ratings/:id

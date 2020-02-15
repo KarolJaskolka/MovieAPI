@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 // GET api/movies/:name
 router.get('/:name', (req, res) => {
     const name = req.params.name;
-    Movie.findAll({
+    Movie.findOne({
         where: {
             name: name
         },
