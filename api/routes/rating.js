@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
             rating: data
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     });
@@ -82,7 +82,7 @@ router.patch('/:id', (req, res) => {
             message: 'Rating has been updated'
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     });
@@ -100,7 +100,7 @@ router.delete(':id', (req, res) => {
             message: 'Rating has been removed'
         })
     }).catch((err) => {
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     });

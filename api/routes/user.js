@@ -4,12 +4,13 @@ const User = require('../models/user');
 const Movie = require('../models/movie');
 const Comment = require('../models/comment');
 const Rating = require('../models/rating');
+const multer = require('multer');
 
 // GET api/users?limit=100&offset=0
 router.get('/', (req, res) => {
     User.findAll({
         // do not return password
-        attributes: ['login', 'firstname', 'lastname', 'email', 'phone', 'birth'],
+        attributes: ['login', 'firstname', 'lastname', 'email', 'phone', 'birth', 'avatar'],
         limit: req.query.limit || 100,
         offset: req.query.offset || 0
     }).then(data => {
@@ -24,7 +25,7 @@ router.get('/:login', (req, res) => {
     const login = req.params.login;
     User.findOne({
         // do not return password
-        attributes: ['login', 'firstname', 'lastname', 'email', 'phone', 'birth'],
+        attributes: ['login', 'firstname', 'lastname', 'email', 'phone', 'birth', 'avatar'],
         where: {
             login: login
         }
@@ -39,6 +40,7 @@ router.get('/:login', (req, res) => {
 router.get('/:login/comments', (req, res) => {
     const login = req.params.login;
     Comment.findAll({
+        order: [['date', 'DESC']],
         attributes: ['commentid', 'title', 'description', 'date'],
         include: [{
             model: Movie,
@@ -59,10 +61,12 @@ router.get('/:login/comments', (req, res) => {
     });
 });
 
-// GET api/users/:login/ratings
+// GET api/users/:login/ratings?orderBy=
 router.get('/:login/ratings', (req, res) => {
     const login = req.params.login;
+    const orderBy = req.query.orderBy || 'date';
     Rating.findAll({
+        order: [[orderBy, 'DESC']],
         attributes: ['ratingid', 'stars', 'date'],
         include: [{
             model: Movie,
@@ -93,15 +97,48 @@ router.post('/', (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         birth: req.body.birth,
+        avatar: req.body.avatar
     }).then((data) => {
         res.status(201).json({
             user: data
         });
     }).catch((err) => {
-        res.status(400).json({
+        res.status(500).json({
             response: err
         });
     });
+});
+
+const storageOpt = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './api/images/users/');
+    },
+    filename: (req, file, cb) => {
+        const date = new Date().toISOString().replace(/:/g, '-'); 
+        cb(null, date + file.originalname);
+    }
+})
+
+const upload = multer({storage: storageOpt});
+
+// POST api/users/avatars
+router.post('/avatars', upload.single('avatar'), (req, res) => {
+    const login = req.body.login;
+    User.update({
+        avatar: req.file.path
+    },{
+        where: {
+            login: login
+        }
+    }).then(()=>{
+        res.status(201).json({
+            message: 'File has been sent'
+        })
+    }).catch((err)=>{
+        res.status(500).json({
+            message: err
+        })
+    })
 });
 
 // PUT api/users/:id
@@ -115,6 +152,7 @@ router.put('/:id', (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         birth: req.body.birth,
+        avatar: req.body.avatar
     },  {
         where: {
             userid: id
@@ -124,7 +162,7 @@ router.put('/:id', (req, res) => {
             message: 'User has been updated!'
         });
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         });
     });
@@ -142,7 +180,7 @@ router.delete('/:id', (req, res) => {
             message: 'User has been removed from database',
         });
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         });
     });

@@ -26,6 +26,7 @@
 - GET api/users/:login/comments
 - GET api/users/:login/ratings
 - POST api/users
+- POST api/users/avatars
 - PUT api/users/:id
 - DELETE api/users/:id
 

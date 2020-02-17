@@ -11,6 +11,7 @@ Movie.init({
     movieid: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true
     },
     title: {
@@ -29,7 +30,8 @@ Movie.init({
     releasedate: Sequelize.DATEONLY,
     duration: Sequelize.INTEGER, // minutes
     description: Sequelize.STRING,
-    rating: Sequelize.NUMBER // derived data, I think thats how sites like imdb works
+    rating: Sequelize.NUMBER, // derived data, I think thats how sites like imdb works
+    poster: Sequelize.STRING
 },  {
     sequelize,
     timestamps: false,

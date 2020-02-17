@@ -63,7 +63,7 @@ router.post('/', (req, res) => {
             comment: data
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     });
@@ -85,7 +85,7 @@ router.patch('/:id', (req, res) => {
             message: 'Comment has been updated'
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     });
@@ -103,7 +103,7 @@ router.delete(':id', (req, res) => {
             message: 'Comment has been removed'
         })
     }).catch((err) => {
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     });

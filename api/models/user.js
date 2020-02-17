@@ -37,7 +37,8 @@ User.init({
         unique: true
     },
     phone: Sequelize.STRING,
-    birth: Sequelize.DATEONLY
+    birth: Sequelize.DATEONLY,
+    avatar: Sequelize.STRING
 },  {
     sequelize,
     timestamps: false,

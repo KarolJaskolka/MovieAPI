@@ -5,9 +5,11 @@ const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const User = require('../models/user');
 
-// GET api/movies?limit=100&offset=0
+// GET api/movies?limit=100&offset=0&orderBy
 router.get('/', (req, res) => {
+    const orderBy = req.query.orderBy || 'rating';
     Movie.findAll({
+        order: [[orderBy, 'DESC']],
         limit: req.query.limit || 100,
         offset: req.query.offset || 0
     }).then(data => {
@@ -35,6 +37,7 @@ router.get('/:name', (req, res) => {
 router.get('/:name/comments', (req, res) => {
     const name = req.params.name;
     Comment.findAll({
+        order: [['date', 'DESC']],
         attributes: ['commentid', 'title', 'description', 'date'],
         include: [{
             attributes: ['login'],
@@ -91,13 +94,14 @@ router.post('/', (req, res) => {
         genre: req.body.genre,
         releasedate: req.body.releasedate,
         description: req.body.description,
-        rating: req.body.rating,
+        rating: 0.0,
+        poster: req.body.poster
     }).then((data)=>{
         res.status(200).json({
             movie: data
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     })
@@ -114,7 +118,7 @@ router.put('/:id', (req, res) => {
         genre: req.body.genre,
         releasedate: req.body.releasedate,
         description: req.body.description,
-        rating: req.body.rating,
+        poster: req.body.poster
     },{
         where: {
             movieid: id
@@ -124,7 +128,7 @@ router.put('/:id', (req, res) => {
             message: 'Movie has been updated'
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     })
@@ -142,7 +146,7 @@ router.delete('/:id', (req, res) => {
             message: 'Movie has been removed'
         })
     }).catch((err)=>{
-        res.status(400).json({
+        res.status(500).json({
             message: err
         })
     })
