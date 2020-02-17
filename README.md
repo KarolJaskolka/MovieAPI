@@ -45,3 +45,7 @@
 - POST api/ratings
 - PATCH api/ratings/:id
 - DELETE api/ratings/:id
+
+#### Authorization
+
+- POST api/auth/login

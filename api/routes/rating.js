@@ -3,6 +3,7 @@ const router = express.Router();
 const Rating = require('../models/rating');
 const User = require('../models/user');
 const Movie = require('../models/movie');
+const checkToken = require('../token/checkToken');
 
 // GET api/ratings?limit=100&offset=0
 router.get('/', (req, res) => {
@@ -50,7 +51,7 @@ router.get('/:id', (req, res) => {
 })
 
 // POST api/ratings
-router.post('/', (req, res) => {
+router.post('/', checkToken, (req, res) => {
     Rating.create({
         userid: req.body.userid,
         movieid: req.body.movieid,
@@ -68,7 +69,7 @@ router.post('/', (req, res) => {
 })
 
 // PATCH api/ratings/:id
-router.patch('/:id', (req, res) => {
+router.patch('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     Rating.update({
         stars: req.body.stars,
@@ -89,7 +90,7 @@ router.patch('/:id', (req, res) => {
 })
 
 // DELETE api/ratings/:id
-router.delete(':id', (req, res) => {
+router.delete(':id', checkToken, (req, res) => {
     const id = req.params.id;
     Rating.destroy({
         where: {

@@ -59,11 +59,13 @@ const movieRoutes = require('./api/routes/movie');
 const userRoutes = require('./api/routes/user');
 const commentRoutes = require('./api/routes/comment');
 const ratingRoutes = require('./api/routes/rating');
+const authRoutes = require('./api/routes/auth');
 
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/ratings', ratingRoutes);
+app.use('/api/auth', authRoutes);
 
 // Serve static files 
 app.use('/api/images', express.static('./api/images'));

@@ -3,6 +3,7 @@ const router = express.Router();
 const Comment = require('../models/comment');
 const User = require('../models/user');
 const Movie = require('../models/movie');
+const checkToken = require('../token/checkToken');
 
 // GET api/comments?limit=100&offset=0
 router.get('/', (req, res) => {
@@ -50,7 +51,7 @@ router.get('/:id', (req, res) => {
 })
 
 // POST api/comments
-router.post('/', (req, res) => {
+router.post('/', checkToken, (req, res) => {
     Comment.create({
         userid: req.body.userid,
         movieid: req.body.movieid,
@@ -70,7 +71,7 @@ router.post('/', (req, res) => {
 })
 
 // PATCH api/comments/:id
-router.patch('/:id', (req, res) => {
+router.patch('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     Comment.update({
         title: req.body.title,
@@ -92,7 +93,7 @@ router.patch('/:id', (req, res) => {
 })
 
 // DELETE api/comments/:id
-router.delete(':id', (req, res) => {
+router.delete(':id', checkToken, (req, res) => {
     const id = req.params.id;
     Comment.destroy({
         where: {

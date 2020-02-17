@@ -5,6 +5,7 @@ const Movie = require('../models/movie');
 const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const multer = require('multer');
+const checkToken = require('../token/checkToken');
 
 // GET api/users?limit=100&offset=0
 router.get('/', (req, res) => {
@@ -97,7 +98,7 @@ router.post('/', (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         birth: req.body.birth,
-        avatar: req.body.avatar
+        avatar: null
     }).then((data) => {
         res.status(201).json({
             user: data
@@ -122,7 +123,7 @@ const storageOpt = multer.diskStorage({
 const upload = multer({storage: storageOpt});
 
 // POST api/users/avatars
-router.post('/avatars', upload.single('avatar'), (req, res) => {
+router.post('/avatars', checkToken, upload.single('avatar'), (req, res) => {
     const login = req.body.login;
     User.update({
         avatar: req.file.path
@@ -142,7 +143,7 @@ router.post('/avatars', upload.single('avatar'), (req, res) => {
 });
 
 // PUT api/users/:id
-router.put('/:id', (req, res) => {
+router.put('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     User.update({
         login: req.body.login,
@@ -169,7 +170,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE api/users/:id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     User.destroy({
         where:{

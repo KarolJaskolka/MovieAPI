@@ -4,6 +4,7 @@ const Movie = require('../models/movie');
 const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const User = require('../models/user');
+const checkToken = require('../token/checkToken');
 
 // GET api/movies?limit=100&offset=0&orderBy
 router.get('/', (req, res) => {
@@ -85,7 +86,7 @@ router.get('/:name/ratings', (req, res) => {
 });
 
 // POST api/movies
-router.post('/', (req, res) => {
+router.post('/', checkToken, (req, res) => {
     Movie.create({
         title: req.body.title,
         name: req.body.name,
@@ -108,7 +109,7 @@ router.post('/', (req, res) => {
 });
 
 // PUT api/movies/:id
-router.put('/:id', (req, res) => {
+router.put('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     Movie.update({
         title: req.body.title,
@@ -135,7 +136,7 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE api/movies/:id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     Movie.destroy({
         where:{
