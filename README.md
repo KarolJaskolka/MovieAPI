@@ -1,4 +1,4 @@
-## Simple REST API
+## Movie REST API
 
 ### Technologies: 
 

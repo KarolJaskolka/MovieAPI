@@ -22,9 +22,7 @@ router.get('/', (req, res) => {
         offset: req.query.offset || 0
     })
     .then(data => {
-        res.status(200).json({
-            ratings: data
-        })
+        res.status(200).json(data)
     })
 })
 
@@ -44,9 +42,7 @@ router.get('/:id', (req, res) => {
         }]
     })
     .then((data) => {
-        res.status(200).json({
-            rating: data
-        })
+        res.status(200).json(data)
     });
 })
 

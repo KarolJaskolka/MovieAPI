@@ -28,7 +28,7 @@ sequelize
 
 // Cross-origin resource sharing (Allow different ports)
 const cors = require('cors');
-const corsOptions = { origin: 'http://localhost' }
+const corsOptions = { origin: 'http://localhost:4200' } // my angular app address
 app.use(cors(corsOptions));
 
 // Prevent multiple requests

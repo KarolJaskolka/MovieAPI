@@ -6,6 +6,7 @@ const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const multer = require('multer');
 const checkToken = require('../token/checkToken');
+const bcrypt = require('bcrypt');
 
 // GET api/users?limit=100&offset=0
 router.get('/', (req, res) => {
@@ -15,9 +16,7 @@ router.get('/', (req, res) => {
         limit: req.query.limit || 100,
         offset: req.query.offset || 0
     }).then(data => {
-        res.status(200).json({
-            users: data
-        });
+        res.status(200).json(data);
     });
 });
 
@@ -31,21 +30,23 @@ router.get('/:login', (req, res) => {
             login: login
         }
     }).then(data => {
-        res.status(200).json({
-            user: data
-        });
+        res.status(200).json(data);
     })
 });
 
 // GET api/users/:login/comments
 router.get('/:login/comments', (req, res) => {
     const login = req.params.login;
+    const limit = req.query.limit;
+    const offset = req.query.offset;
     Comment.findAll({
+        limit: limit || 50,
+        offset: offset || 0,
         order: [['date', 'DESC']],
         attributes: ['commentid', 'title', 'description', 'date'],
         include: [{
             model: Movie,
-            attributes: ['title', 'name',  'director', 'genre', 'rating', 'releasedate', 'duration'],
+            attributes: ['title', 'name',  'director', 'genre', 'rating', 'releasedate', 'duration', 'poster'],
             required: true
         },{
             model: User,
@@ -56,9 +57,7 @@ router.get('/:login/comments', (req, res) => {
             }
         }]
     }).then(data => {
-        res.status(200).json({
-            comments: data
-        });
+        res.status(200).json(data);
     });
 });
 
@@ -66,12 +65,16 @@ router.get('/:login/comments', (req, res) => {
 router.get('/:login/ratings', (req, res) => {
     const login = req.params.login;
     const orderBy = req.query.orderBy || 'date';
+    const limit = req.query.limit;
+    const offset = req.query.offset;
     Rating.findAll({
+        limit: limit || 50,
+        offset: offset || 0,
         order: [[orderBy, 'DESC']],
         attributes: ['ratingid', 'stars', 'date'],
         include: [{
             model: Movie,
-            attributes: ['title', 'name', 'director', 'genre', 'rating', 'releasedate', 'duration'],
+            attributes: ['title', 'name', 'director', 'genre', 'rating', 'releasedate', 'duration',  'poster'],
             required: true       
         },{
             model: User,
@@ -82,32 +85,38 @@ router.get('/:login/ratings', (req, res) => {
             }
         }]
     }).then(data => {
-        res.status(200).json({
-            ratings: data
-        })
+        res.status(200).json(data)
     });
 });
 
 // POST api/users
 router.post('/', (req, res) => {
-    User.create({
-        login: req.body.login,
-        password: req.body.password,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        phone: req.body.phone,
-        birth: req.body.birth,
-        avatar: null
-    }).then((data) => {
-        res.status(201).json({
-            user: data
-        });
-    }).catch((err) => {
-        res.status(500).json({
-            response: err
-        });
-    });
+    bcrypt.hash(req.body.password, 10, (error, hash) => {
+        if (!error){
+            User.create({
+                login: req.body.login,
+                password: hash,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                phone: req.body.phone,
+                birth: req.body.birth,
+                avatar: null
+            }).then((data) => {
+                res.status(201).json({
+                    user: data
+                });
+            }).catch((err) => {
+                res.status(500).json({
+                    response: err
+                });
+            });
+        } else{
+            res.status(500).json({
+                message: error
+            })
+        }
+    })
 });
 
 const storageOpt = multer.diskStorage({
@@ -145,28 +154,37 @@ router.post('/avatars', checkToken, upload.single('avatar'), (req, res) => {
 // PUT api/users/:id
 router.put('/:id', checkToken, (req, res) => {
     const id = req.params.id;
-    User.update({
-        login: req.body.login,
-        password: req.body.password,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        phone: req.body.phone,
-        birth: req.body.birth,
-        avatar: req.body.avatar
-    },  {
-        where: {
-            userid: id
+    bcrypt.hash(req.body.password, 10, (error, hash) => {
+        if(!error){
+            User.update({
+                login: req.body.login,
+                password: hash,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                phone: req.body.phone,
+                birth: req.body.birth,
+                avatar: req.body.avatar
+            },  {
+                where: {
+                    userid: id
+                }
+            }).then(() => {
+                res.status(200).json({
+                    message: 'User has been updated!'
+                });
+            }).catch((err)=>{
+                res.status(500).json({
+                    message: err
+                });
+            });
         }
-    }).then(() => {
-        res.status(200).json({
-            message: 'User has been updated!'
-        });
-    }).catch((err)=>{
-        res.status(500).json({
-            message: err
-        });
-    });
+        else{
+            res.status(500).json({
+                message: error
+            })
+        }
+    })
 });
 
 // DELETE api/users/:id

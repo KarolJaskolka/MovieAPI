@@ -14,9 +14,7 @@ router.get('/', (req, res) => {
         limit: req.query.limit || 100,
         offset: req.query.offset || 0
     }).then(data => {
-        res.status(200).json({
-            movies: data
-        });
+        res.status(200).json(data);
     });
 });
 
@@ -28,16 +26,18 @@ router.get('/:name', (req, res) => {
             name: name
         },
     }).then(data => {
-        res.status(200).json({
-            movie: data
-        });
+        res.status(200).json(data);
     });
 });
 
 // GET api/movies/:name/comments
 router.get('/:name/comments', (req, res) => {
     const name = req.params.name;
+    const limit = req.query.limit;
+    const offset = req.query.offset;
     Comment.findAll({
+        limit: limit || 50,
+        offset: offset || 0,
         order: [['date', 'DESC']],
         attributes: ['commentid', 'title', 'description', 'date'],
         include: [{
@@ -50,20 +50,23 @@ router.get('/:name/comments', (req, res) => {
             model: Movie,
             required: true,
             where: {
-                name: name
+                name: name,
+                threadid: null
             }
         }] 
       }).then(data => {
-        res.status(200).json({
-            comments: data
-        });
+        res.status(200).json(data);
     });
 });
 
 // GET api/movies/:name/ratings
 router.get('/:name/ratings', (req, res) => {
     const name = req.params.name;
+    const limit = req.query.limit;
+    const offset = req.query.offset;
     Rating.findAll({
+        limit: limit || 50,
+        offset: offset || 0,
         attributes: ['ratingid', 'stars', 'date'],
         include: [{
             attributes: ['login'],
@@ -79,9 +82,7 @@ router.get('/:name/ratings', (req, res) => {
             }
         }] 
       }).then(data => {
-        res.status(200).json({
-            ratings: data
-        });
+        res.status(200).json(data);
     });
 });
 
