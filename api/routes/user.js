@@ -89,6 +89,32 @@ router.get('/:login/ratings', (req, res) => {
     });
 });
 
+// GET api/users/:userid/ratings/:movieid
+router.get('/:id/ratings/:movieid', (req, res) => {
+    const id = req.params.id;
+    const movieid = req.params.movieid;
+    Rating.findOne({
+        attributes: ['ratingid', 'stars', 'date'],
+        where: {
+            movieid: movieid
+        },
+        include: [{
+            model: Movie,
+            attributes: ['title', 'name', 'director', 'genre', 'rating', 'releasedate', 'duration',  'poster'],
+            required: true       
+        },{
+            model: User,
+            attributes: [],
+            required: true,
+            where: {
+                userid: id
+            }
+        }]
+    }).then(data => {
+        res.status(200).json(data)
+    });
+});
+
 // POST api/users
 router.post('/', (req, res) => {
     bcrypt.hash(req.body.password, 10, (error, hash) => {
@@ -103,9 +129,7 @@ router.post('/', (req, res) => {
                 birth: req.body.birth,
                 avatar: null
             }).then((data) => {
-                res.status(201).json({
-                    user: data
-                });
+                res.status(201).json(data);
             }).catch((err) => {
                 res.status(500).json({
                     response: err

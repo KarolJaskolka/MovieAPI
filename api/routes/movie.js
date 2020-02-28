@@ -40,6 +40,9 @@ router.get('/:name/comments', (req, res) => {
         offset: offset || 0,
         order: [['date', 'DESC']],
         attributes: ['commentid', 'title', 'description', 'date'],
+        where: {
+            threadid: null
+        },
         include: [{
             attributes: ['login'],
             model: User,
@@ -50,8 +53,7 @@ router.get('/:name/comments', (req, res) => {
             model: Movie,
             required: true,
             where: {
-                name: name,
-                threadid: null
+                name: name
             }
         }] 
       }).then(data => {

@@ -25,6 +25,7 @@
 - GET api/users/:login
 - GET api/users/:login/comments
 - GET api/users/:login/ratings
+- GET api/users/:id/ratings/:movieid
 - POST api/users
 - POST api/users/avatars
 - PUT api/users/:id
