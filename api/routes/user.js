@@ -90,8 +90,8 @@ router.get('/:login/ratings', (req, res) => {
 });
 
 // GET api/users/:userid/ratings/:movieid
-router.get('/:id/ratings/:movieid', (req, res) => {
-    const id = req.params.id;
+router.get('/:userid/ratings/:movieid', (req, res) => {
+    const userid = req.params.userid;
     const movieid = req.params.movieid;
     Rating.findOne({
         attributes: ['ratingid', 'stars', 'date'],
@@ -107,7 +107,7 @@ router.get('/:id/ratings/:movieid', (req, res) => {
             attributes: [],
             required: true,
             where: {
-                userid: id
+                userid: userid
             }
         }]
     }).then(data => {

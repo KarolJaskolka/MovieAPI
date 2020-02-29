@@ -5,7 +5,7 @@ const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const User = require('../models/user');
 const checkToken = require('../token/checkToken');
-const { Op } = require("sequelize");
+const Sequelize = require("sequelize");
 
 // GET api/movies?limit=100&offset=0&orderBy=date&search=Av
 router.get('/', (req, res) => {
@@ -17,9 +17,9 @@ router.get('/', (req, res) => {
         offset: req.query.offset || 0,
         where: {
             title: {
-                [Op.like]: search
+                [Sequelize.Op.iLike]: search
             }
-        }
+        },
     }).then(data => {
         res.status(200).json(data);
     });
