@@ -5,14 +5,21 @@ const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const User = require('../models/user');
 const checkToken = require('../token/checkToken');
+const { Op } = require("sequelize");
 
-// GET api/movies?limit=100&offset=0&orderBy
+// GET api/movies?limit=100&offset=0&orderBy=date&search=Av
 router.get('/', (req, res) => {
     const orderBy = req.query.orderBy || 'rating';
+    const search = req.query.search ? '%' + req.query.search + '%' : '%%';
     Movie.findAll({
         order: [[orderBy, 'DESC']],
         limit: req.query.limit || 100,
-        offset: req.query.offset || 0
+        offset: req.query.offset || 0,
+        where: {
+            title: {
+                [Op.like]: search
+            }
+        }
     }).then(data => {
         res.status(200).json(data);
     });
