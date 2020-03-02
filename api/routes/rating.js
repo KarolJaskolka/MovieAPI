@@ -86,7 +86,7 @@ router.patch('/:id', checkToken, (req, res) => {
 })
 
 // DELETE api/ratings/:id
-router.delete(':id', checkToken, (req, res) => {
+router.delete('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     Rating.destroy({
         where: {

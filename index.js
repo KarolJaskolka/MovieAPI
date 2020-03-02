@@ -60,7 +60,7 @@ const userRoutes = require('./api/routes/user');
 const commentRoutes = require('./api/routes/comment');
 const ratingRoutes = require('./api/routes/rating');
 const authRoutes = require('./api/routes/auth');
-
+const updateRoutes = require('./api/routes/update');app.use('/api/', updateRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);

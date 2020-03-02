@@ -89,7 +89,7 @@ router.patch('/:id', checkToken, (req, res) => {
 })
 
 // DELETE api/comments/:id
-router.delete(':id', checkToken, (req, res) => {
+router.delete('/:id', checkToken, (req, res) => {
     const id = req.params.id;
     Comment.destroy({
         where: {
