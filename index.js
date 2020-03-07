@@ -26,9 +26,9 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-// Cross-origin resource sharing (Allow different ports)
+// Cross-origin resource sharing
 const cors = require('cors');
-const corsOptions = { origin: 'http://localhost:4200' } // my angular app address
+const corsOptions = { origin: 'http://localhost:4200' } // my angular movie-app address
 app.use(cors(corsOptions));
 
 // Prevent multiple requests
@@ -60,7 +60,7 @@ const userRoutes = require('./api/routes/user');
 const commentRoutes = require('./api/routes/comment');
 const ratingRoutes = require('./api/routes/rating');
 const authRoutes = require('./api/routes/auth');
-const updateRoutes = require('./api/routes/update');app.use('/api/', updateRoutes);
+
 app.use('/api/movies', movieRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);

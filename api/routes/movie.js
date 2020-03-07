@@ -51,7 +51,7 @@ router.get('/:name/comments', (req, res) => {
             threadid: null
         },
         include: [{
-            attributes: ['login'],
+            attributes: ['login', 'avatar'],
             model: User,
             required: true
         },
@@ -108,7 +108,7 @@ router.post('/', checkToken, (req, res) => {
         rating: 0.0,
         poster: req.body.poster
     }).then((data)=>{
-        res.status(200).json({
+        res.status(201).json({
             movie: data
         })
     }).catch((err)=>{
