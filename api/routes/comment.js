@@ -3,7 +3,7 @@ const router = express.Router();
 const Comment = require('../models/comment');
 const User = require('../models/user');
 const Movie = require('../models/movie');
-const checkToken = require('../token/checkToken');
+const checkToken = require('../middleware/checkToken');
 
 // GET api/comments?limit=100&offset=0
 router.get('/', (req, res) => {

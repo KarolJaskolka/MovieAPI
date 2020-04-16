@@ -5,7 +5,7 @@ const Movie = require('../models/movie');
 const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 const multer = require('multer');
-const checkToken = require('../token/checkToken');
+const checkToken = require('../middleware/checkToken');
 const bcrypt = require('bcrypt');
 
 // GET api/users?limit=100&offset=0
