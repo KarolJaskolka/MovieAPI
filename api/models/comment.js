@@ -1,12 +1,8 @@
-const Movie = require('../models/movie');
-const User = require('../models/user');
-const Sequelize = require('sequelize');
+const { Sequelize, sequelize} = require('../database/sequelize');
 const Model = Sequelize.Model;
 
-const sequelize = new Sequelize(process.env.DATABASE, process.env.LOGIN, process.env.PASS, {
-    host: process.env.HOST,
-    dialect: 'postgres'
-});
+const Movie = require('../models/movie');
+const User = require('../models/user');
 
 class Comment extends Model {}
 Comment.init({

@@ -11,11 +11,7 @@ app.listen(port, host, ()=>{
     console.log(`Server is listening on ${host}:${port}`)
 });
 
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(process.env.DATABASE, process.env.LOGIN, process.env.PASS, {
-  host: process.env.HOST,
-  dialect: 'postgres'
-});
+const { sequelize } = require('./api/database/sequelize');
 
 sequelize
   .authenticate()
