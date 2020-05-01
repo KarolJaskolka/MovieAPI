@@ -27,7 +27,6 @@
 - GET api/users/:login/comments
 - GET api/users/:login/ratings
 - GET api/users/:userid/ratings/:movieid
-- POST api/users
 - POST api/users/avatars
 - PUT api/users/:id
 - DELETE api/users/:id
@@ -51,3 +50,5 @@
 #### Authorization
 
 - POST api/auth/login
+- POST api/auth/register
+- POST api/auth/token

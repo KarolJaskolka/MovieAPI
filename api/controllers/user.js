@@ -3,8 +3,6 @@ const Movie = require('../models/movie');
 const Comment = require('../models/comment');
 const Rating = require('../models/rating');
 
-const bcrypt = require('bcrypt');
-
 exports.getUsers = (req, res) => {
     User.findAll({
         // do not return password
@@ -105,33 +103,6 @@ exports.getUserRatingByMovieId = (req, res) => {
     }).then(data => {
         res.status(200).json(data)
     });
-}
-
-exports.addUser = (req, res) => {
-    bcrypt.hash(req.body.password, 10, (error, hash) => {
-        if (!error){
-            User.create({
-                login: req.body.login,
-                password: hash,
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                email: req.body.email,
-                phone: req.body.phone,
-                birth: req.body.birth,
-                avatar: null
-            }).then((data) => {
-                res.status(201).json(data);
-            }).catch((err) => {
-                res.status(500).json({
-                    response: err
-                });
-            });
-        } else{
-            res.status(500).json({
-                message: error
-            })
-        }
-    })
 }
 
 exports.updateUser = (req, res) => {

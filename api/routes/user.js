@@ -7,24 +7,20 @@ const uploadController = require('../controllers/upload');
 const multer = require('multer');
 const checkToken = require('../middleware/checkToken');
 
-
 // GET api/users?limit=100&offset=0
-router.get('/', userController.getUsers);
+router.get('/', checkToken, userController.getUsers);
 
 // GET api/users/:login
-router.get('/:login', userController.getUserByLogin);
+router.get('/:login', checkToken, userController.getUserByLogin);
 
 // GET api/users/:login/comments
-router.get('/:login/comments', userController.getUserComments);
+router.get('/:login/comments', checkToken, userController.getUserComments);
 
 // GET api/users/:login/ratings?orderBy=
-router.get('/:login/ratings', userController.getUserRatings);
+router.get('/:login/ratings', checkToken, userController.getUserRatings);
 
 // GET api/users/:userid/ratings/:movieid
-router.get('/:userid/ratings/:movieid', userController.getUserRatingByMovieId);
-
-// POST api/users
-router.post('/', userController.addUser);
+router.get('/:userid/ratings/:movieid', checkToken, userController.getUserRatingByMovieId);
 
 // PUT api/users/:id
 router.put('/:id', checkToken, userController.updateUser);

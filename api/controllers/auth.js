@@ -35,8 +35,6 @@ exports.login = (req, res) => {
                     })
                     tokenList.push(refreshToken);
                     res.status(200).json({
-                        userid: data.userid,
-                        login: data.login,
                         token: token,
                         refreshToken: refreshToken
                     })
@@ -49,6 +47,33 @@ exports.login = (req, res) => {
         } else{
             res.status(400).json({
                 message: 'Validation failed'
+            })
+        }
+    })
+}
+
+exports.register = (req, res) => {
+    bcrypt.hash(req.body.password, 10, (error, hash) => {
+        if (!error){
+            User.create({
+                login: req.body.login,
+                password: hash,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                phone: req.body.phone,
+                birth: req.body.birth,
+                avatar: null
+            }).then((data) => {
+                res.status(201).json(data);
+            }).catch((err) => {
+                res.status(500).json({
+                    response: err
+                });
+            });
+        } else{
+            res.status(500).json({
+                message: error
             })
         }
     })
