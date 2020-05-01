@@ -1,8 +1,8 @@
 const User = require('../models/user');
+const RefreshToken = require('../models/refreshToken');
+
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
-let tokenList = [] // just for now
 
 exports.login = (req, res) => {
     User.findOne({
@@ -33,11 +33,17 @@ exports.login = (req, res) => {
                     { 
                         expiresIn: '1d'
                     })
-                    tokenList.push(refreshToken);
-                    res.status(200).json({
-                        token: token,
-                        refreshToken: refreshToken
-                    })
+                    RefreshToken
+                        .create({token: refreshToken})
+                        .then(()=>{
+                            res.status(200).json({
+                                token: token,
+                                refreshToken: refreshToken
+                            })
+                        })
+                        .catch((err)=>{
+                            res.status(500).json(err);
+                        })
                 } else{
                     res.status(400).json({
                         message: 'Validation failed'
@@ -79,16 +85,27 @@ exports.register = (req, res) => {
     })
 }
 
-exports.refreshToken = (req, res) => {
+exports.refreshToken = async (req, res) => {
     const refreshToken = req.body.refreshToken;
     const login = req.body.login;
+    
+    let user;
+    try {
+        user = await User.findOne({where: {login: login}})
+    } catch(err){
+        res.status(500).json(err);
+    }
 
-    if(tokenList.includes(refreshToken)){
+    RefreshToken.findOne({
+        where: {
+            token: refreshToken
+        }
+    }).then(()=>{
         try{
             const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH_KEY);
             const token = jwt.sign({
                 login: login,
-                userid: data.userid
+                userid: user.userid
             },
                 process.env.JWT_SECRET_KEY,
             {
@@ -102,11 +119,11 @@ exports.refreshToken = (req, res) => {
                 message: 'Forbidden'
             })
         }
-    }
-    else{
+    })
+    .catch(err=>{
         res.status(403).json({
             message: 'Forbidden'
         })
-    }
+    })
 
 }

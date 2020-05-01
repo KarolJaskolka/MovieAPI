@@ -20,7 +20,7 @@ router.get('/:login/comments', checkToken, userController.getUserComments);
 router.get('/:login/ratings', checkToken, userController.getUserRatings);
 
 // GET api/users/:userid/ratings/:movieid
-router.get('/:userid/ratings/:movieid', checkToken, userController.getUserRatingByMovieId);
+router.get('/:userid/ratings/:movieid', userController.getUserRatingByMovieId);
 
 // PUT api/users/:id
 router.put('/:id', checkToken, userController.updateUser);
