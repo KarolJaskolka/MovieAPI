@@ -69,7 +69,7 @@ exports.updateCommment = async (req, res) => {
                 commentid: id
             }
         })
-        if (comment.userId != req.userId) {
+        if (comment.userid != req.userId) {
             res.status(401).json({
                 message: 'Unauthorized'
             })
@@ -111,7 +111,7 @@ exports.deleteComment = async (req, res) => {
                 commentid: id
             }
         })
-        if (comment.userId != req.userId) {
+        if (comment.userid != req.userId) {
             res.status(401).json({
                 message: 'Unauthorized'
             })
