@@ -68,7 +68,7 @@ exports.updateRating = async (req, res) => {
             }
         })
         if(rating.userid != req.userId){
-            res.status(403).json({
+            res.status(401).json({
                 message: 'Unauthorized'
             })
         }
@@ -107,7 +107,7 @@ exports.deleteRating = async (req, res) => {
             }
         })
         if(rating.userid != req.userId){
-            res.status(403).json({
+            res.status(401).json({
                 message: 'Unauthorized'
             })
         }

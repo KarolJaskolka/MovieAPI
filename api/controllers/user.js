@@ -123,7 +123,7 @@ exports.updateUser = async (req, res) => {
     const id = req.params.id;
 
     if(id != req.userId){
-        res.status(403).json({
+        res.status(401).json({
             message: 'Unauthorized'
         })
     }
@@ -164,7 +164,7 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     const id = req.params.id;
     if(id != req.userId){
-        res.status(403).json({
+        res.status(401).json({
             message: 'Unauthorized'
         })
     }
