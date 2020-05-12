@@ -60,40 +60,80 @@ exports.addComment = (req, res) => {
     });
 }
 
-exports.updateCommment = (req, res) => {
+exports.updateCommment = async (req, res) => {
     const id = req.params.id;
-    Comment.update({
-        title: req.body.title,
-        description: req.body.description,
-        date: new Date()
-    },{
-        where: {
-            commentid: id
+    
+    try {
+        const comment = await Comment.findOne({
+            where: {
+                commentid: id
+            }
+        })
+        if (comment.userId != req.userId) {
+            res.status(401).json({
+                message: 'Unauthorized'
+            })
         }
-    }).then(()=>{
-        res.status(200).json({
-            message: 'Comment has been updated'
-        })
-    }).catch((err)=>{
+        else{
+            Comment.update({
+                title: req.body.title,
+                description: req.body.description,
+                date: new Date()
+            },{
+                where: {
+                    commentid: id
+                }
+            }).then(()=>{
+                res.status(200).json({
+                    message: 'Comment has been updated'
+                })
+            }).catch((err)=>{
+                res.status(500).json({
+                    message: err
+                })
+            });
+        }
+    } catch (e) {
         res.status(500).json({
-            message: err
+            message: e
         })
-    });
+    }
+    
 }
 
-exports.deleteComment = (req, res) => {
+exports.deleteComment = async (req, res) => {
+    
     const id = req.params.id;
-    Comment.destroy({
-        where: {
-            commentid: id
+
+    try {
+        const comment = await Comment.findOne({
+            where: {
+                commentid: id
+            }
+        })
+        if (comment.userId != req.userId) {
+            res.status(401).json({
+                message: 'Unauthorized'
+            })
         }
-    }).then(() => {
-        res.status(200).json({
-            message: 'Comment has been removed'
-        })
-    }).catch((err) => {
+        else{
+            Comment.destroy({
+                where: {
+                    commentid: id
+                }
+            }).then(() => {
+                res.status(200).json({
+                    message: 'Comment has been removed'
+                })
+            }).catch((err) => {
+                res.status(500).json({
+                    message: err
+                })
+            });
+        }
+    } catch (e) {
         res.status(500).json({
-            message: err
+            message: e
         })
-    });
+    }
 }

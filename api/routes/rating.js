@@ -6,7 +6,7 @@ const ratingController = require('../controllers/rating');
 const checkToken = require('../middleware/checkToken');
 
 // GET api/ratings?limit=100&offset=0
-router.get('/', ratingController.getRatings)
+router.get('/', checkToken, ratingController.getRatings)
 
 // GET api/ratings/:id
 router.get('/:id', ratingController.getRatingById)

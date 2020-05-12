@@ -66,10 +66,7 @@ exports.register = (req, res) => {
                 password: hash,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
-                email: req.body.email,
-                phone: req.body.phone,
-                birth: req.body.birth,
-                avatar: null
+                email: req.body.email
             }).then((data) => {
                 res.status(201).json(data);
             }).catch((err) => {

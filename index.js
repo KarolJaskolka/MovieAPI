@@ -7,16 +7,15 @@ dotenv.config();
 const port = process.env.PORT;
 const host = process.env.HOST;
 
-app.listen(port, host, ()=>{
-    console.log(`Server is listening on ${host}:${port}`)
-});
-
 const { sequelize } = require('./api/database/sequelize');
 
 sequelize
   .authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
+    app.listen(port, host, ()=>{
+      console.log(`Server is listening on ${host}:${port}`)
+  });
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);

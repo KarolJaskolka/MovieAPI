@@ -58,39 +58,77 @@ exports.addRating = (req, res) => {
     });
 }
 
-exports.updateRating = (req, res) => {
+exports.updateRating = async (req, res) => {
     const id = req.params.id;
-    Rating.update({
-        stars: req.body.stars,
-        date: new Date()
-    },{
-        where: {
-            ratingid: id
+
+    try {
+        const rating = await Rating.findOne({
+            where: {
+                ratingid: id
+            }
+        })
+        if(rating.userId != req.userId){
+            res.status(403).json({
+                message: 'Unauthorized'
+            })
         }
-    }).then(()=>{
-        res.status(200).json({
-            message: 'Rating has been updated'
-        })
-    }).catch((err)=>{
+        else{
+            Rating.update({
+                stars: req.body.stars,
+                date: new Date()
+            },{
+                where: {
+                    ratingid: id
+                }
+            }).then(()=>{
+                res.status(200).json({
+                    message: 'Rating has been updated'
+                })
+            }).catch((err)=>{
+                res.status(500).json({
+                    message: err
+                })
+            });
+        }
+    } catch(e) {
         res.status(500).json({
-            message: err
+            message: e
         })
-    });
+    }
 }
 
-exports.deleteRating = (req, res) => {
+exports.deleteRating = async (req, res) => {
     const id = req.params.id;
-    Rating.destroy({
-        where: {
-            ratingid: id
+
+    try {
+        const rating = await Rating.findOne({
+            where: {
+                ratingid: id
+            }
+        })
+        if(rating.userId != req.userId){
+            res.status(403).json({
+                message: 'Unauthorized'
+            })
         }
-    }).then(() => {
-        res.status(200).json({
-            message: 'Rating has been removed'
-        })
-    }).catch((err) => {
+        else{
+            Rating.destroy({
+                where: {
+                    ratingid: id
+                }
+            }).then(() => {
+                res.status(200).json({
+                    message: 'Rating has been removed'
+                })
+            }).catch((err) => {
+                res.status(500).json({
+                    message: err
+                })
+            });
+        }
+    } catch(e) {
         res.status(500).json({
-            message: err
+            message: e
         })
-    });
+    }
 }

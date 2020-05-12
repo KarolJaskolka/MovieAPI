@@ -6,7 +6,7 @@ const commentController = require('../controllers/comment');
 const checkToken = require('../middleware/checkToken');
 
 // GET api/comments?limit=100&offset=0
-router.get('/', commentController.getComments)
+router.get('/', checkToken, commentController.getComments)
 
 // GET api/comments/:id
 router.get('/:id', commentController.getCommentById)
